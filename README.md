@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # CPU Utilization Distribution
 
 ![About](SCREEN-CPU-Utilization-Distribution.png)
