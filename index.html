@@ -36,6 +36,7 @@
       var id=getQueryVariable("id") // id={itemIdDa}
       var startTime=getQueryVariable("startTime"); // startTime={TimeStartUTC}
       var endTime=getQueryVariable("endTime"); // endTime={TimeEndUTC}
+      var itemType=getQueryVariable("itemType");
 
     // Determine resolution to use within query as well as dynamically determine max # of rows
     // based on time-range and resolution
@@ -61,10 +62,21 @@
       }
       else {
 
-        url="/pc/odata/api/cpumfs?$select=Timestamp,im_Utilization&$filter=((DeviceItemID eq " + id + "))" +
-            "&starttime=" + startTime + "&endtime=" + endTime + "&resolution=" + resolution +
-            "&$top=" + rows +
-            "&$format=text/csv";
+        if (itemType == "device") {
+            url="/pc/odata/api/cpumfs?$select=Timestamp,im_Utilization" +
+              "&$filter=((DeviceItemID eq " + id + "))" +
+              "&starttime=" + startTime + "&endtime=" + endTime + "&resolution=" + resolution +
+              "&$top=" + rows +
+              "&$format=text/csv";
+        }
+        else if (itemType == "group" || itemType == "site") {
+            url="/pc/odata/api/cpumfs?$select=Timestamp,im_Utilization" +
+              "&$filter=((groups/ID eq " + id + "))" +
+              "&starttime=" + startTime + "&endtime=" + endTime + "&resolution=" + resolution +
+              "&$top=" + rows +
+              "&$format=text/csv";
+        }
+        
 
         console.log("URL: " + url);
 
@@ -129,7 +141,7 @@
                 //.rotateLabels(-45)      //Angle to rotate x-axis labels.
                 .margin({top: 50, right: 50, bottom: 50, left: 80})
                 .stacked(true)
-                //.showControls(true)  //Allow user to switch between 'Grouped' and 'Stacked' mode.
+                .showControls(false)  //Allow user to switch between 'Grouped' and 'Stacked' mode.
                 .groupSpacing(.4)    //Distance between each group of bars.
       chart.color(["#d62626","#F38C31","#FDF46D","#62bc51"])
       chart.options({forceY: [0,100]})
